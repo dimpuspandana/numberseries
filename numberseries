@@ -1,0 +1,123 @@
+package search;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
+
+public class search extends JFrame implements ActionListener {
+
+    JTextArea questionArea;
+    JTextField answerField;
+    JButton generateBtn, checkBtn;
+
+    int correctAnswer;
+    int score = 0;
+    int total = 0;
+
+    int[] arr;
+
+    Random rand = new Random();
+
+    public search() {
+
+        setTitle("Doubling Difference Series");
+        setSize(650, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        
+        JPanel top = new JPanel();
+        generateBtn = new JButton("Generate Series");
+        checkBtn = new JButton("Check Answer");
+
+        generateBtn.addActionListener(this);
+        checkBtn.addActionListener(this);
+
+        top.add(generateBtn);
+        top.add(checkBtn);
+
+        
+        questionArea = new JTextArea();
+        questionArea.setFont(new Font("Monospaced", Font.BOLD, 16));
+        questionArea.setEditable(false);
+
+        JScrollPane scroll = new JScrollPane(questionArea);
+
+        
+        JPanel bottom = new JPanel();
+        bottom.add(new JLabel("Your Answer:"));
+        answerField = new JTextField(10);
+        bottom.add(answerField);
+
+        add(top, BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
+        add(bottom, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    private void generateSeries() {
+
+        arr = new int[5];
+
+        arr[0] = rand.nextInt(10) + 5;   
+        int diff = rand.nextInt(5) + 2;  
+
+        for (int i = 1; i < 5; i++) {
+            arr[i] = arr[i - 1] + diff;
+            diff = diff * 2;  
+        }
+
+        int lastDiff = arr[4] - arr[3];
+        correctAnswer = arr[4] + (lastDiff * 2);
+
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Pattern: Doubling Difference\n\nSeries:\n");
+
+        for (int n : arr) {
+            sb.append(n).append("  ");
+        }
+        sb.append("?");
+
+        questionArea.setText(sb.toString());
+        answerField.setText("");
+    }
+
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == generateBtn) {
+            generateSeries();
+        }
+
+        if (e.getSource() == checkBtn) {
+
+            if (arr == null) {
+                JOptionPane.showMessageDialog(this, "Generate series first!");
+                return;
+            }
+
+            try {
+                int userAns = Integer.parseInt(answerField.getText());
+                total++;
+
+                if (userAns == correctAnswer) {
+                    score++;
+                    JOptionPane.showMessageDialog(this, "Correct ✅");
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Wrong ❌\nCorrect Answer: " + correctAnswer);
+                }
+
+                setTitle("Score: " + score + " / " + total);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Enter valid number");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new search();
+    }
+}
