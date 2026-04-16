@@ -1,0 +1,153 @@
+package pro;
+import java.util.*;
+
+class Account {
+    int accNo;
+    String name;
+    double balance;
+
+    Account(int accNo, String name, double balance) {
+        this.accNo = accNo;
+        this.name = name;
+        this.balance = balance;
+    }
+
+    void deposit(double amount) {
+        balance += amount;
+        System.out.println("Amount Deposited: " + amount);
+    }
+
+    void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            System.out.println("Amount Withdrawn: " + amount);
+        } else {
+            System.out.println("Insufficient Balance!");
+        }
+    }
+
+    void display() {
+        System.out.println("Account No: " + accNo +
+                           ", Name: " + name +
+                           ", Balance: " + balance);
+    }
+}
+
+public class pro {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Account> accounts = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n===== BANK MANAGEMENT SYSTEM =====");
+            System.out.println("1. Create Account");
+            System.out.println("2. View All Accounts");
+            System.out.println("3. Deposit");
+            System.out.println("4. Withdraw");
+            System.out.println("5. Search Account");
+            System.out.println("6. Delete Account");
+            System.out.println("7. Exit");
+            System.out.print("Enter choice: ");
+
+            int ch = sc.nextInt();
+
+            switch (ch) {
+                case 1:
+                    System.out.print("Enter Account No: ");
+                    int accNo = sc.nextInt();
+                    System.out.print("Enter Name: ");
+                    String name = sc.next();
+                    System.out.print("Enter Initial Balance: ");
+                    double bal = sc.nextDouble();
+
+                    accounts.add(new Account(accNo, name, bal));
+                    System.out.println("Account created!");
+                    break;
+
+                case 2:
+                    if (accounts.isEmpty()) {
+                        System.out.println("No accounts found.");
+                    } else {
+                        for (Account a : accounts) {
+                            a.display();
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter Account No: ");
+                    int depAcc = sc.nextInt();
+                    System.out.print("Enter Amount: ");
+                    double depAmt = sc.nextDouble();
+
+                    boolean depFound = false;
+                    for (Account a : accounts) {
+                        if (a.accNo == depAcc) {
+                            a.deposit(depAmt);
+                            depFound = true;
+                        }
+                    }
+                    if (!depFound) System.out.println("Account not found.");
+                    break;
+
+                case 4:
+                    System.out.print("Enter Account No: ");
+                    int witAcc = sc.nextInt();
+                    System.out.print("Enter Amount: ");
+                    double witAmt = sc.nextDouble();
+
+                    boolean witFound = false;
+                    for (Account a : accounts) {
+                        if (a.accNo == witAcc) {
+                            a.withdraw(witAmt);
+                            witFound = true;
+                        }
+                    }
+                    if (!witFound) System.out.println("Account not found.");
+                    break;
+
+                case 5:
+                    System.out.print("Enter Account No to search: ");
+                    int searchAcc = sc.nextInt();
+                    boolean found = false;
+
+                    for (Account a : accounts) {
+                        if (a.accNo == searchAcc) {
+                            a.display();
+                            found = true;
+                        }
+                    }
+
+                    if (!found) System.out.println("Account not found.");
+                    break;
+
+                case 6:
+                    System.out.print("Enter Account No to delete: ");
+                    int delAcc = sc.nextInt();
+
+                    Iterator<Account> it = accounts.iterator();
+                    boolean removed = false;
+
+                    while (it.hasNext()) {
+                        Account a = it.next();
+                        if (a.accNo == delAcc) {
+                            it.remove();
+                            removed = true;
+                            System.out.println("Account deleted!");
+                        }
+                    }
+
+                    if (!removed) System.out.println("Account not found.");
+                    break;
+
+                case 7:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
