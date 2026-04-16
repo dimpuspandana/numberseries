@@ -1,0 +1,119 @@
+package pro;
+import java.util.*;
+
+class Student {
+    int id;
+    String name;
+    int marks;
+
+    Student(int id, String name, int marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    String getGrade() {
+        if (marks >= 90) return "A";
+        else if (marks >= 75) return "B";
+        else if (marks >= 50) return "C";
+        else return "Fail";
+    }
+}
+
+public class pro {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n===== SCHOOL MANAGEMENT SYSTEM =====");
+            System.out.println("1. Add Student");
+            System.out.println("2. View All Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Delete Student");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+
+            int ch = sc.nextInt();
+
+            switch (ch) {
+                case 1:
+                    System.out.print("Enter ID: ");
+                    int id = sc.nextInt();
+                    System.out.print("Enter Name: ");
+                    String name = sc.next();
+                    System.out.print("Enter Marks: ");
+                    int marks = sc.nextInt();
+
+                    students.add(new Student(id, name, marks));
+                    System.out.println("Student added!");
+                    break;
+
+                case 2:
+                    if (students.isEmpty()) {
+                        System.out.println("No students found.");
+                    } else {
+                        for (Student s : students) {
+                            System.out.println(
+                                "ID: " + s.id +
+                                ", Name: " + s.name +
+                                ", Marks: " + s.marks +
+                                ", Grade: " + s.getGrade()
+                            );
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter ID to search: ");
+                    int searchId = sc.nextInt();
+                    boolean found = false;
+
+                    for (Student s : students) {
+                        if (s.id == searchId) {
+                            System.out.println(
+                                "Found -> Name: " + s.name +
+                                ", Marks: " + s.marks +
+                                ", Grade: " + s.getGrade()
+                            );
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+
+                case 4:
+                    System.out.print("Enter ID to delete: ");
+                    int delId = sc.nextInt();
+
+                    Iterator<Student> it = students.iterator();
+                    boolean removed = false;
+
+                    while (it.hasNext()) {
+                        Student s = it.next();
+                        if (s.id == delId) {
+                            it.remove();
+                            removed = true;
+                            System.out.println("Student deleted!");
+                        }
+                    }
+
+                    if (!removed) {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
